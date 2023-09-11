@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+
+<head  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Contador de Cliques</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .fade-in {
+        animation: fadeIn 1s ease-in;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+        .buttons-html5.modal {
+            background-color: #222; /* Defina a cor de fundo desejada */
+        }
+        .custom-textarea {
+            height: 200px;
+            width: 500px;
+            margin-left: 60%;
+            resize: none;
+        }
+        .sidebar {
+            position: fixed;
+            left: -200px;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: left 0.3s;
+        }
+        .sidebar.show {
+            left: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #646464;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .sidebar-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+        
+        /* Modo escuro */
+        body.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+        
+        /* Títulos em verde */
+        h1 {
+            color: green;
+        }
+        
+        /* Estilos do sidebar em modo escuro */
+        body.dark-mode .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+        
+        /* Estilos do título do sidebar em modo escuro */
+        body.dark-mode .sidebar h1 {
+            color: green; /* Mantém o título em verde */
+        }
+        
+        /* Estilos do texto do sidebar em modo escuro */
+        body.dark-mode .sidebar ul li a {
+            color: #fff;
+        }
+        .custom-textarea {
+        height: 200px;
+        width: 500px;
+        margin-left: 60%;
+        resize: none;
+        background-color: #222; /* Modo escuro para a caixa de texto */
+        color: #fff; /* Texto branco */
+        border: 2px solid #fff; /* Borda branca */
+        padding: 10px; /* Espaçamento interno */
+    }
+    /* Estilos padrão */
+
+.teste {
+  background-color: red; /* Fundo vermelho como padrão (janela para desktop*/
+}
+
+/* Estilos para dispositivos móveis (resolução menor que 768px) */
+/* @media (max-width: 767px) and (max-height: 500px) {       */
+@media (max-width: 1080px) {
+    .btn-danger{
+        size: 50%;
+    }
+
+    .contador_lbl{
+        font-size: 700%;
+    }
+    .contador_btn{
+        font-size: 500%;
+    }
+    .elimina_btn{
+        font-size: 250%;
+    }
+
+    .label_contagem{
+        font-size: 700%;
+    }
+
+    .btn_excel{
+        font-size: 300%;
+    }
+
+    .btns_mensagem_historico{
+        font-size: 300%;
+        width: 250px;
+        margin-left: -10%;
+    }
+
+    .btns_mensagem_salvar{
+        font-size: 300%;
+        margin-left: 20%;
+        width: 150px;
+    }
+
+    .text_area{
+        font-size: 300%;
+        padding:20%;
+        width: 130%;
+        margin-left: -15%;
+    }
+
+    .table_clicks{
+        font-size: 250%;
+    }
+    .calendario{
+        font-size: 250%;
+    }
+  
+    .btn_modalClick{
+        font-size: 350%;
+        margin-bottom: 70%;
+        padding: 2%;
+
+    }
+    .btn_modalClickExcel{
+        margin-top: 1%;
+        font-size: 350%;
+        margin-left: -19%;
+
+    }
+    .modalPeriodo{
+        width: 1000%;
+        height: 69%;
+    }
+
+    .sideBar_btn{
+        padding: 10%;
+        position: "fixed";
+    }
+
+    .modalHistClicks{
+        margin-left: -10%;
+    }
+    
+    .tituloTabela{
+        font-size: 150%;
+    }
+
+    .textoTabela{
+        font-size: 200%;
+        padding: auto;
+    }
+  
+
+    .footerTabela{
+        padding: 2%;
+        margin-left: 1%;
+        height: 0%;
+    }
+   
+.flatpickr-calendar{
+    margin-left: 25%;
+}
+    .flatpickr-month {
+  padding: 30%;  /* Espaçamento desejado */
+  font-size: 26px;
+  margin-top: -19%;
+
+}
+.flatpickr-day,
+.flatpickr-selector,
+.flatpickr-weekday,
+.flatpickr-time {
+    width: 9000%;
+    width: 50%;
+  font-size: 36px; /* Tamanho da fonte desejado */
+}
+
+
+                                                /* tabela perguntas */
+.btnFecharModalPerguntas{
+    font-size: 250%;
+}
+
+.tabelaPerguntas{
+    font-size: 250%;
+    height: 75%;
+}
+.modalPerguntas{
+    height: 63%;
+}
+
+.textoTabelaPergunta{
+        font-size: 130%;
+        padding: auto;
+    }
+
+.footerModalPergunta{
+    height:10%;
+}
+
+    /* side_nav */
+    .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: left 0.3s;
+        }
+        .sidebar.show {
+            left: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 50px;
+        }
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #646464;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .sidebar-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+        
+        /* Modo escuro */
+        body.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+        
+        /* Títulos em verde */
+        h1 {
+            color: green;
+        }
+        
+        /* Estilos do sidebar em modo escuro */
+        body.dark-mode .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+        
+        /* Estilos do título do sidebar em modo escuro */
+        body.dark-mode .sidebar h1 {
+            color: green; /* Mantém o título em verde */
+        }
+        
+        /* Estilos do texto do sidebar em modo escuro */
+        body.dark-mode .sidebar ul li a {
+            color: #fff;
+                font-size: 250%;
+        }
+        
+
+.sidebarTexto{
+    font-size: 250%;
+}
+
+.sidebarImagem{
+    width:99%;
+    height:52%;
+}
+
+
+}
+
+    </style>
+
+</head>
+<body class="dark-mode " content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <div class="sidebar">
+
+        <ul>
+            <a href="/">
+                <img src='{% static "logo.jpg" %}'width="164" height="82" alt="Logo" class="sidebarImagem">
+            </a>
+            <li><a href="/" class="active"><i class="bi bi-house-door-fill sidebarTexto"></i> Página Inicial</a></li>
+            <li><a href="/home_registo_compras"><i class="bi bi-person-fill sidebarTexto"></i> Registo de Compras</a></li>
+            <li><a href="/configurations"><i class="bi bi-gear-fill sidebarTexto"></i>Configurações</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <button class="btn btn-danger fade-in elimina_btn" style="margin-left: 80%;margin-top: -5%;"id="btnEliminaClique">Eliminar Clique</button>
+        <h1 class="fade-in contador_lbl" style="color: rgba(34, 176, 34, 0.835)">Contador de Cliques {{periodo}}</h1>
+        <br></br>
+        {% if periodo == "Ainda não está nenhum periodo ativo" %}
+        <button id="btnClick" class="btn btn-primary fade-in contador_btn"disabled style="background-color: rgb(210, 219, 88)">Ainda não começou o Turno</button>
+
+        {% else %}
+        <button id="btnClick" class="btn btn-primary fade-in contador_btn" style="padding: 5%; background-color: rgb(210, 219, 88);">Clique Aqui</button>
+        {% endif %}
+        <br><br>
+
+        <label class="sidebarTexto" for="numero">Selecione um número:</label>
+            <select class="sidebarTexto" id="numero">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+        <br><br>
+        <label id="clickCount" value="{{contador_atual}}" class="btn btn-secondary fade-in label_contagem">{{contador_atual}}</label>
+        <br></br>
+        <br></br>
+        <button id="btnExcel" class="btn btn-success fade-in btn_excel" data-bs-toggle="modal" >Historico</button>
+    </div>
+
+    <!-- Modal -->
+    <br></br>
+    <br></br>       <br></br>
+    <br></br>       <br></br>
+
+    
+    <div class="sidebar-toggle fade-in sideBar_btn" id="sidebarToggle">
+        <div class="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- ...seu conteúdo existente... -->
+        <button id="btnHistory" class="btn btn-primary fade-in btns_mensagem_historico" >Histórico</button> <!-- Botão para abrir o histórico -->
+        <button id="btnSave" class="btn btn-primary fade-in btns_mensagem_salvar" >Salvar</button> <!-- Botão para salvar o texto -->
+        <br></br>       <br></br>
+        <textarea id="textBox" class="form-control custom-textarea fade-in text_area"></textarea>
+    </div>
+
+    <div class="modal fade" id="modalHistory" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalHistoryLabel">Histórico de Mensagens</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade modalHistClicks" id="modalPeriodo" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modalPeriodo">
+            <div class="modal-content modalPeriodo" style="background-color: rgb(81, 80, 80);">
+                <div class="modal-header">
+                    <h5 class="modal-title table_clicks" id="modalHistoryLabel" style="color: rgb(208, 220, 79);">Histórico de Cliques</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <table id="dataTable" class="table table-dark table-striped table_clicks " style="text-align:center;background-color: rgb(81, 80, 80);">
+                    <thead>
+                    <tr>
+                        <th style="color: rgb(208, 220, 79);" class="textoTabela">Turno 1</th>
+                        <th style="color: rgb(208, 220, 79);" class="textoTabela">Turno 2</th>
+                        <th style="color: rgb(208, 220, 79);" class="textoTabela">Turno 3</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                </table>
+                <div id="datepicker"></div>
+                <div class="modal-footer footerTabela">
+                    <button id="btnExcelFimDia" class="btn btn-success btn_modalClickExcel" style="size: 10%; margin-right: 85%;">Excel</button>
+                    <button id="fecharModalHistorico" type="button" class="btn btn-secondary btn_modalClick" data-bs-dismiss="modal"style="size: 10%; margin-top:-8%;color:rgb(208, 220, 79);">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL PERGUNTAS -->
+
+
+</div><div class="modal fade" id="modalPeriodoPerguntas" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modalPerguntas">
+        <div class="modal-content modalPerguntas" style="background-color: rgb(81, 80, 80);">
+            <div class="modal-header ">
+                <h5 class="modal-title btnFecharModalPerguntas" id="modalHistoryLabelPerguntas" style="color: rgb(0, 209, 0);">Histórico de Perguntas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <table id="dataTablePerguntas" class="table table-dark table-striped tabelaPerguntas btnFecharModalPerguntas" style="text-align:center;background-color: rgb(81, 80, 80);">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody class="modalPerguntas">
+            </table>
+            <div class="modal-footer footerModalPergunta">
+                <button type="button" class="btn btn-secondary btnFecharModalPerguntas" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+
+
+    <script>
+       
+
+
+
+        $(document).ready(function() {
+            
+
+           
+
+        var datePicker = flatpickr("#datepicker", {
+            inline: true,
+            dateFormat: "Y-m-d",
+            mode: "range",
+            onClose: function(selectedDates, dateStr, instance) {
+                
+                selectedDates1 = [selectedDates[0], selectedDates[1]];
+                var startDate = selectedDates[0].toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                var endDate = selectedDates[1].toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                $.ajax({
+                type: 'POST',
+                url: '/getCliques/',
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                success: function (value) {
+                    console.log("RESULTADO->",value.contador_atualp1)
+                    table.clear()   
+                    row = `<tr>
+                                    <td title="${value.contador_atualp1}"  style="font-size:20px"> ${value.contador_atualp1}</td>
+                                    <td title="${value.contador_atualp2}" style="font-size:20px"> ${value.contador_atualp2}</td>
+                                    <td title="${value.contador_atualp3}" style="font-size:20px"> ${value.contador_atualp3}</td>
+                            </tr>`;
+                            table.rows.add($(row))
+                            table.draw()
+                }
+            })
+                
+                //datePicker.setDate(null);
+                //datePicker.clear();
+                    }
+                });
+            var table = $('#dataTable').DataTable({
+                paging: false,
+                info: false,
+                scrollCollapse: true,
+                dom: 'frtipB',
+                orderCellsTop: true,
+                searching: false,
+           
+                
+                buttons: [
+                    'excel'
+                ],
+            });
+            var tablePerguntas = $('#dataTablePerguntas').DataTable({
+                paging: false,
+                info: false,
+                scrollY: 745,
+                scrollCollapse: true,
+                dom: 'frtipB',
+                orderCellsTop: true,
+                searching: false,
+           
+                
+                buttons: [
+                    'csv'
+                ],
+            });
+
+
+
+        var textBox = document.getElementById('textBox');
+        var savedText = '';
+
+        /* textBox.addEventListener('focusout', function() {
+            savedText = textBox.value;
+            console.log(savedText);
+           
+            if (textBox.value === ''){
+
+            }else{
+            $.ajax({
+                type: 'POST',
+                url: '/add_pergunta/',
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    pergunta: savedText,
+                },
+                success: function() {
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Pergunta guardada',
+                    showConfirmButton: false
+                    });
+                }
+            });
+        }
+        
+            textBox.value = '';
+        }); */
+        var btnSave = document.getElementById('btnSave');
+
+        btnSave.addEventListener('click', function() {
+            savedText = textBox.value;
+            if (textBox.value === ''){
+                Swal.fire({
+                        icon: 'error',
+                        title: 'Pergunta não pode estar vazia',
+                        showConfirmButton: false
+                        
+                        });
+                }else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/add_pergunta/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        pergunta: savedText,
+                    },
+                    success: function() {
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Pergunta guardada',
+                        showConfirmButton: false
+                        });
+                    }
+                });
+                }
+            console.log(savedText);
+            textBox.value = '';
+        });
+
+       
+
+        var btnSave = document.getElementById('btnSave');
+
+var textBox = document.getElementById('textBox');
+var messageList = document.getElementById('messageList');
+
+btnSave.addEventListener('click', function() {
+    var message = textBox.value.trim();
+    if (message !== '') {
+        var listItem = document.createElement('li');
+        listItem.textContent = message;
+        listItem.classList.add('list-group-item');
+        messageList.appendChild(listItem);
+        
+        textBox.value = '';
+    }
+});
+
+var btnSalvarComentario = document.getElementById('btnSave');
+        btnSalvarComentario.addEventListener('click', function() {
+            var pergunta = document.getElementById('textBox').value;
+            console.log("pergunta", pergunta);
+
+            
+        });
+
+var btnHistory = document.getElementById('btnHistory');
+btnHistory.addEventListener('click', function() {
+    var modalHistory = new bootstrap.Modal(document.getElementById('modalPeriodoPerguntas'));
+    modalHistory.show();
+});
+var btnEliminaClique = document.getElementById('btnEliminaClique');
+//btnEliminaClique.addEventListener('btnEliminaClique', function() {
+
+
+
+        var clickCount = 0;
+        var clicks = [];
+        var clickCount = parseInt(document.getElementById('clickCount').textContent);
+        var btnClick = document.getElementById('btnClick');
+        var clickCountLabel = document.getElementById('clickCount');
+        var textBox = document.getElementById('textBox');
+        
+        btnClick.addEventListener('click', function() {
+            var dropdown = document.getElementById('numero');
+            var nReps = parseInt(dropdown.value);
+            if(nReps === 1){
+            clickCount++;
+            }else{
+                clickCount += nReps;
+            }
+            clickCountLabel.textContent = clickCount;
+            btnClick.classList.add('animate__animated', 'animate__bounce');
+
+        // Remova a classe após um intervalo de tempo para repetir a animação
+        // Tempo em milissegundos para remover a classe (aqui definido como 1 segundo)
+    
+        });
+
+        var btnExcel = document.getElementById('btnExcel');
+        btnExcel.addEventListener('click', function() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalPeriodo'))
+            $.ajax({
+            type: 'POST',
+            url: '/getCliques/',
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                start_date: ""
+            },
+            success: function (value) {
+                console.log("RESULTADO->",value.contador_atualp1)
+                table.clear()   
+                row = `<tr>
+                                <td title="${value.contador_atualp1}"  class="textoTabela"> ${value.contador_atualp1}</td>
+                                <td title="${value.contador_atualp2}"  class="textoTabela"> ${value.contador_atualp2}</td>
+                                <td title="${value.contador_atualp3}"  class="textoTabela"> ${value.contador_atualp3}</td>
+                        </tr>`;
+                        table.rows.add($(row))
+                        table.draw()
+            }
+        })
+            myModal.show()
+            
+            
+        });
+        
+        $(document).on('click', '#btnEliminaClique', function () {
+            if ( clickCountLabel.textContent === "0"){
+                
+            }else{
+
+                    swal({
+                    title: "Deseja apagar ultimo clique?",
+                    text: "Essa ação não pode ser desfeita!",
+                    icon: "warning",
+                    buttons: ["Não", "Sim"],
+                    dangerMode: true,
+                    })
+                    .then((confirm) => {
+                    if (confirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/elimina_ultimo_valor/',
+                            data: {
+                                csrfmiddlewaretoken: "{{ csrf_token }}",
+                            },
+                            success: function (value) {
+                                
+                            }
+                        })
+            clickCount--;
+            clickCountLabel.textContent = clickCount;
+                        swal("Ação realizada com sucesso!", {
+                        icon: "success",
+                        });
+                    }
+                    });
+
+
+           
+
+       
+        }
+    });
+    
+
+    $(document).on('click', '#fecharModalHistorico', function () {
+        datePicker.close();
+
+    })
+
+    $(document).on('click', '#fecharModalHistorico', function () {
+        datePicker.close();
+
+    })
+
+        $(document).on('click', '#btnExcelFimDia', function () {
+        var selectedDates = datePicker.selectedDates
+        console.log(selectedDates.length)
+        if (selectedDates.length === 0 ){
+        $.ajax({
+                type: 'POST',
+                url: '/download_excel_all_final_dia/',
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (value) {
+                    /* var element = document.createElement('a');
+                    element.setAttribute('href', ':/Users/pedromartins/Documents/ProjAlentejo/clickerAlentejo/clickerAlentejo/ficheiros/excel_clickers_diario.xls');
+                    element.setAttribute('download', 'excel_clickers_diario.xls');
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element); */
+
+
+                    var element = document.createElement('a');
+                        //Ainda por fazer
+                        element.setAttribute('href', './download_excel_all_final_dia');
+                        element.setAttribute('download', 'excel_clickers_diario.xls');
+
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
+
+                        element.click();
+
+                        document.body.removeChild(element);
+                    
+                }
+                
+            })
+        }else{
+            // fazer o request para quando tem datas selecionadas no calendario
+
+            selectedDates1 = [selectedDates[0], selectedDates[1]];
+            console.log("selectedDates[0]",selectedDates[0])
+                var startDate = selectedDates[0].toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                var endDate = selectedDates[1].toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                $.ajax({
+                type: 'POST',
+                url: '/download_excel_all_final_dia/',
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                success: function (value) {
+                    var element = document.createElement('a');
+                        //Ainda por fazer
+                        element.setAttribute('href', './download_excel_all_final_dia');
+                        element.setAttribute('download', 'excel_clickers_diario.xls');
+
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
+
+                        element.click();
+
+                        document.body.removeChild(element);
+            alert("tem datas")
+
+                }
+            })
+
+        }
+    });
+
+        $('#modalPeriodoPerguntas').on('shown.bs.modal', function() {
+            //var data = table.row(this).data();
+            console.log("vai buscar as perguntas")
+            $.ajax({
+            type: 'POST',
+            url: '/getPerguntas/',
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                
+            },
+            success: function (value) {
+              
+                tablePerguntas.clear()   
+            for(let i of value) {
+                if(i.pergunta === ""){
+                    
+                }else{
+                console.log("i",i)
+                row = `<tr>
+                                <td title="${i.pergunta}" class="textoTabelaPergunta"> ${i.pergunta}</td>
+                        </tr>`;
+                        tablePerguntas.rows.add($(row))
+
+                    }
+                        tablePerguntas.draw()
+                }
+            }
+        })
+        
+        });
+
+       
+
+        var sidebar = document.querySelector('.sidebar');
+        var sidebarToggle = document.getElementById('sidebarToggle');
+
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+        });
+
+        //codigo para quando clicas no enter quando estas a escrever na text Box
+        /* textBox.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                savedText = textBox.value;
+                console.log(savedText);
+                textBox.value = ''; // Limpa a caixa de texto
+                $.ajax({
+                        type: 'POST',
+                        url: '/addContador/',
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                        success: function () {
+                        }
+                    })
+        
+    
+                
+            }
+        }); */
+
+
+        $(document).on('dblclick', function () {
+    // Coloque aqui o código que deseja executar quando ocorrer o duplo clique na página.
+    console.log("foi feito o dup")
+})
+
+
+
+        var btnClick = document.getElementById('btnClick');
+        btnClick.addEventListener('click', function() {
+            var dropdown = document.getElementById('numero');
+            var nReps = dropdown.value;
+
+        $.ajax({
+                        type: 'POST',
+                        url: '/addContador/',
+                        data: {
+                            nReps:  nReps,
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                        success: function () {
+                        }
+                    })
+        })
+
+        var btnSave = document.getElementById('btnSave');
+
+        
+    })
+    </script>
+</body>
+</html>

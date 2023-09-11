@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Registo de Compras</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+
+        /* Modo escuro */
+        body.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* Títulos em verde */
+        h2 {
+            color: green;
+        }
+
+        /* Estilos da tabela */
+        
+
+        .sidebar {
+            position: fixed;
+            left: -200px;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: left 0.3s;
+            z-index: 1; /* Aumenta o índice de sobreposição */
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #646464;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        #dataTable tbody tr:nth-child(even) {
+        background-color: #454d55;
+    }
+
+    .sidebar-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+        
+
+        /* Modo escuro */
+        body.dark-mode .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Estilos do título do sidebar em modo escuro */
+        body.dark-mode .sidebar h1 {
+            color: green;
+        }
+
+        /* Estilos do texto do sidebar em modo escuro */
+        body.dark-mode .sidebar ul li a {
+            color: #fff;
+        }
+        .custom-cancel-button {
+            background-color: rgb(236, 32, 52) !important;
+            color: white !important;
+            }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="sidebar">
+        <a href="/">
+            <img src='{% static "logo.jpg" %}'width="164" height="82" alt="Logo">
+        </a>
+        <ul>
+            <li><a href="/" class="active"><i class="bi bi-house-door-fill"></i> Página Inicial</a></li>
+            <li><a href="/home_registo_compras"><i class="bi bi-person-fill"></i> Registo de Compras</a></li>
+            <li><a href="/configurations"><i class="bi bi-gear-fill"></i>Configurações</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+
+        <h2>Registo de Compras</h2>
+    <button id="abreModalFimCompras" type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="size: 10%; margin-left:45%;margin-top:1%">Fechar Contas</button>
+
+        <table id="dataTable" class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th style="display:  none;">Id</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Total €</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+        {% for compra in compras %}
+            <tr>
+                <td style="display:  none;">{{compra.id}}</td>
+                <td>{{compra.nPessoa}}</td>
+                <td>{{compra.descricao}}</td>
+                <td>{{compra.total}}</td>
+                <td>{{compra.data}}</td>
+                <td>
+                    <button id="editaRow"class="btn btn-sm btn-primary">Editar</button>
+                    <button id="eliminaRow" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button id="abrirModal"class="btn btn-sm btn-warning">Abrir</button>
+                </td>
+            </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        <button id="btnAdd" style="padding: 5%; margin-left:35%;margin-top:5%" class="btn btn-primary">Adicionar Nova Compra</button>
+    </div>
+
+
+<div class="modal fade" id="modalAddPergunta" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: rgb(81, 80, 80);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalHistoryLabelPerguntas" style="color: rgb(0, 209, 0);">Adicionar Compra</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div style="padding-bottom: 5%;">
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Nome</strong></p>
+                <input type="text" class="form-control mt-n3" name="nomeInput" id="nomeInput"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Descrição</strong></p>
+                <input type="text" class="form-control mt-n3" name="descricaoInput" id="descricaoInput"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Total</strong></p>
+                <input type="text" class="form-control mt-n3" name="totalInput" id="totalInput"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnSaveCompra" data-bs-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalEditaFatura" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: rgb(81, 80, 80);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalHistoryLabelPerguntas" style="color: rgb(0, 209, 0);">Editar Fatura</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+        <div style="padding-bottom: 5%;">
+            <div style="margin-left: 5px; text-align: center; display: none;">
+                <p style="font-size: 16px"><strong>Id</strong></p>
+                <input type="text" class="form-control mt-n3" name="idEdit" id="idEdit"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Nome</strong></p>
+                <input type="text" class="form-control mt-n3" name="nPessoaEdit" id="nPessoaEdit"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Descrição</strong></p>
+                <input type="text" class="form-control mt-n3" name="descricaoEdit" id="descricaoEdit"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+
+            <div style="margin-left: 5px; text-align: center">
+                <p style="font-size: 16px"><strong>Total</strong></p>
+                <input type="text" class="form-control mt-n3" name="totalEdit" id="totalEdit"
+                       style="margin-left: 5%;width: 425px; background-color: floralwhite"
+                       required>
+                
+            </div>
+        </div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnSaveEditCompra"data-bs-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalFatura" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+        <div class="modal-content" style="background-color: rgb(81, 80, 80);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalHistoryLabel" style="color: rgb(0, 209, 0);">Registo de divida</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" style="padding: 0;">
+        
+                <div id="tabela" style="text-align:center">
+                    <!-- The dynamically created table will be placed here -->
+                </div>
+                <p></p>
+                <label id="labelTotalGasto" style="margin-left: 30%;">:</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="size: 10%; margin-top:-1%">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalFimCompras" tabindex="-1" aria-labelledby="modalHistoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+        <div class="modal-content" style="background-color: rgb(81, 80, 80);">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalHistoryLabel" style="color: rgb(0, 209, 0);">Contas a pagar:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" >
+                <div id="tabelaFimContas1">
+                    <!-- The dynamically created table will be placed here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="size: 10%; margin-top:-1%">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Inicializar DataTable
+            var table = $('#dataTable').DataTable({
+                paging: false,
+                info: false,
+                scrollCollapse: true,
+                dom: 'Bfrtip',
+                orderCellsTop: true,
+                buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+            });
+            var tableConta = $('#dataTableConta').DataTable({
+                paging: false,
+                info: false,
+                scrollCollapse: true,
+                dom: 'Bfrtip',
+                orderCellsTop: true,
+                buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+            });
+            var tableFimContas = $('#dataTableFimContas').DataTable({
+                paging: false,
+                info: false,
+                scrollCollapse: true,
+                dom: 'Bfrtip',
+                orderCellsTop: true,
+                buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+            });
+
+            // Ação do botão "Adicionar Nova Compra"
+            
+            $('#btnAdd').on('click', function() {
+                // Aqui você pode adicionar a lógica para adicionar uma nova entrada na tabela
+                console.log('Clicou em Adicionar Nova Compra');
+                var modalHistory = new bootstrap.Modal(document.getElementById('modalAddPergunta'));
+               /*  $.ajax({
+                        type: 'POST',
+                        url: '/add_compra/',
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            descricao: $("#descricaoInput:text").val(),
+                            nPessoa: $("#nomeInput:text").val(), // Adicione o valor do atributo data-input-id nos dados enviados
+                            total: $("#totalInput:text").val() // Adicione o valor do atributo data-input-id nos dados enviados
+                        },
+                        success: function(value) {
+                            // Lógica de sucesso para cada caixa de texto individual
+                           
+
+                    alert(value.id)
+                    row = `<tr>
+                        <td  style="display:  none;" title="${value.id}"> ${value.id}</td>
+                             <td title="${value.nPessoa}"  style="font-size:20px"> ${value.nPessoa}</td>
+                                <td title="${value.descricao}" style="font-size:20px"> ${value.descricao}</td>
+                                <td title="${value.total}" style="font-size:20px"> ${value.total}</td>
+                                <td title="${value.data}" style="font-size:20px"> ${value.data}</td>
+                                <td>
+                            <button class="btn btn-sm btn-primary">Editar</button>
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                            <button id="abrirModal"class="btn btn-sm btn-warning">Abrir</button>
+                        </td>
+                        </tr>`;
+                        table.rows.add($(row))
+                        table.draw() 
+
+                        }
+                    });
+                    */
+
+                modalHistory.show();
+            });
+
+            $('#abreModalFimCompras').on('click', function() {
+                // Aqui você pode adicionar a lógica para adicionar uma nova entrada na tabela
+                console.log('Clicou em Adicionar Nova Compra');
+                var modalHistory = new bootstrap.Modal(document.getElementById('modalFimCompras'));
+                $.ajax({
+                        type: 'POST',
+                        url: '/fechar_contas/',
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                        success: function(value) {
+                            tableConta.clear();
+                            //console.log("value",value)
+                            let contador = 0
+                            var row = '<table id="dataTableFimContas" style="width: 100%; height: 100%;" class="table-dark table-striped"> <thead>';
+                            row += '<tr><td style="font-size:20px;text-align: right;padding-right: 10%;">  &#8601 DEVE</td>';
+                                for (let i of value.pessoas){
+                                row += '<td title="' + i.pessoa + '"style="font-size:20px">' + i.pessoa + '</td>';
+                                //console.log("i",i.pessoa) //titulo
+                            }
+                            row += '</tr></thead>';
+                            
+                            row += '<tbody>';
+                            for (let i of value.pessoas){
+                                contador = 0
+                                const contas = Object.entries(i).filter(([key]) => key !== 'pessoa' || key === i.pessoa);
+                                row += '<tr>'
+                                    console.log("contas",contas)
+                                    
+                                contas.forEach(([nome, valor]) => {
+                                    console.log(`${nome} deve: ${valor}` + " a " + i.pessoa);
+                                    
+                                    if (contador===0){ //para colocar a primeira linha com o nome da pessoa
+                                        row += `<td title="`+ i.pessoa+ `" style="font-size:20px">`+ i.pessoa+ `</td>`;
+                                        row += `<td title="${valor}" style="font-size:20px">${valor}</td>`;
+                                    }
+                                    else{
+                                        row += `<td title="${valor}" style="font-size:20px">${valor}</td>`;
+
+                                    }
+                                    contador += 1
+                                    
+                                        
+                                        })
+                                        
+                                        row += '</<tr>'
+
+                           }
+                    row += '</tbody></table>';
+                    //console.log(row)
+
+                    $('#tabelaFimContas1').html(row); // Set the dynamically created table inside the div with ID 'tabela'
+
+                    modalHistory.show();
+
+
+
+                        }
+                    });
+            });
+
+            $('#btnSaveCompra').on('click', function() {
+                // Aqui você pode adicionar a lógica para adicionar uma nova entrada na tabela
+                var modalHistory = new bootstrap.Modal(document.getElementById('modalAddPergunta'));
+                console.log('Clicou em Adicionar Nova Compra',$("#descricaoInput:text").val());
+
+                $.ajax({
+                        type: 'POST',
+                        url: '/add_compra/',
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            descricao: $("#descricaoInput:text").val(),
+                            nPessoa: $("#nomeInput:text").val(), // Adicione o valor do atributo data-input-id nos dados enviados
+                            total: $("#totalInput:text").val() // Adicione o valor do atributo data-input-id nos dados enviados
+                        },
+                        success: function(value) {
+                            // Lógica de sucesso para cada caixa de texto individual
+                            Swal.fire({
+                    icon: 'success',
+                    title: 'Nova conta adicionada',
+                    showConfirmButton: false
+                    });
+                            window.location.reload();
+
+                    /* alert(value.id)
+                    row = `<tr>
+                        <td  style="display:  none;" title="${value.id}"> ${value.id}</td>
+                             <td title="${value.nPessoa}"  style="font-size:20px"> ${value.nPessoa}</td>
+                                <td title="${value.descricao}" style="font-size:20px"> ${value.descricao}</td>
+                                <td title="${value.total}" style="font-size:20px"> ${value.total}</td>
+                                <td title="${value.data}" style="font-size:20px"> ${value.data}</td>
+                                <td>
+                            <button class="btn btn-sm btn-primary">Editar</button>
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                            <button id="abrirModal"class="btn btn-sm btn-warning">Abrir</button>
+                        </td>
+                        </tr>`;
+                        table.rows.add($(row))
+                        table.draw() */
+
+                        }
+                    });
+
+
+            });
+
+            // Ações dos botões "Editar" e "Eliminar"
+            $('#dataTable tbody').on('click', '#editaRow', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                var data = row.data();
+
+                console.log("DATA", data[4])
+                var id = data[0]
+                var nPessoa = data[1]
+                var descricao = data[2]
+
+                
+                document.getElementById("idEdit").value = id
+                document.getElementById("nPessoaEdit").value = nPessoa
+                document.getElementById("descricaoEdit").value = descricao
+                document.getElementById("totalEdit").value = data[3]
+                var modalHistory = new bootstrap.Modal(document.getElementById('modalEditaFatura'));
+                modalHistory.show();
+            })
+
+            $('#btnSaveEditCompra').on('click', function() {
+                if(document.getElementById("idEdit").value === '' ||
+                document.getElementById("nPessoaEdit").value === '' ||
+                document.getElementById("descricaoEdit").value  === ''||
+                document.getElementById("totalEdit").value === '' ){
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'TODOS OS CAMPOS TEM DE SER PREENCHIDOS',
+                    showConfirmButton: false
+                    });
+                }else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/edita_fatura/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        id: document.getElementById("idEdit").value,
+                        nPessoa: document.getElementById("nPessoaEdit").value,
+                        descricao: document.getElementById("descricaoEdit").value,
+                        total: document.getElementById("totalEdit").value,
+
+                    },
+                    success: function(value) {
+                        Swal.fire({
+                    icon: 'success',
+                    title: 'Conta foi alterada',
+                    showConfirmButton: false
+                    });
+                    window.location.reload()
+                    }
+                });
+            }
+            });
+
+
+            
+            $('#dataTable tbody').on('click', '#eliminaRow', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                var rowData = row.data();
+
+                Swal.fire({
+                title: 'Deseja apagar conta?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonClass: 'custom-cancel-button',
+                cancelButtonText: 'Não'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                    type: 'POST',
+                    url: '/elimina_fatura/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        id: rowData[0],
+                    },
+                    success: function(value) {
+                        Swal.fire({
+                    icon: 'error',
+                    title: 'Conta apagada',
+                    showConfirmButton: false
+                    });
+                    window.location.reload()
+                    }
+                });
+                } else if (result.isDenied) {
+                }
+                });
+
+                
+            })
+
+            $('#dataTable tbody').on('click', '#abrirModal', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                var rowData = row.data();
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_dados_fatura/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        id: rowData[0],
+                        nPessoa: rowData[1]
+                    },
+                    success: function(value) {
+                        tableConta.clear();
+
+                    var row = '<table id="dataTableConta" style="width: 100%; height: 100%;" class="table-dark table-striped"><thead>';
+                    for (let pessoa of value.pessoas) {
+                        row += '<td title="' + pessoa + '" style="font-size:20px">' + pessoa + '</td>';
+                    }
+                    row += '</thead>';
+
+                    for (var i = 0; i < value.pessoas_qty; i++) {
+                        row += '<td title="' + value.valor_a_pagar + '" style="font-size:20px">' + value.valor_a_pagar + '</td>';
+                    }
+
+                    row += '</tr></tbody></table>';
+
+                    $('#tabela').html(row); // Set the dynamically created table inside the div with ID 'tabela'
+
+                    var modalHistory = new bootstrap.Modal(document.getElementById('modalFatura'));
+                    modalHistory.show();
+                    }
+                });
+            })
+
+            $('#dataTable tbody').on('dblclick', 'tr', function () {
+                var tr = $(this).closest('tr'); 
+                var row = table.row(tr);    
+                var rowData = row.data();
+                console.log("ID->",rowData[0])    
+                console.log("Nome->",rowData[1])  
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_dados_fatura/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        id: rowData[0],
+                        nPessoa: rowData[1]
+                    },
+                    success: function(value) {
+                        tableConta.clear();
+                        document.getElementById("labelTotalGasto").textContent = Object.keys(value.total) + ` já gastou ` + Object.values(value.total) + ` € no total`;
+                    var row = '<table id="dataTableConta" style="width: 100%; height: 100%;" class="table-dark table-striped"><thead>';
+                    for (let pessoa of value.pessoas) {
+                        row += '<td title="' + pessoa + '" style="font-size:20px">' + pessoa + '</td>';
+                    }
+                    row += '</thead>';
+
+                    for (var i = 0; i < value.pessoas_qty; i++) {
+                        row += '<td title="' + value.valor_a_pagar + '" style="font-size:20px">' + value.valor_a_pagar + '</td>';
+                    }
+
+                    row += '</tr></tbody></table>';
+
+                    $('#tabela').html(row); // Set the dynamically created table inside the div with ID 'tabela'
+
+                    var modalHistory = new bootstrap.Modal(document.getElementById('modalFatura'));
+                    modalHistory.show();
+                    }
+                });
+
+              
+            })
+            
+            
+            
+
+            document.addEventListener('click', function(event) {
+      var sidebar = document.getElementById('sidebar');
+      var targetElement = event.target;
+      var sidebarDisplay = window.getComputedStyle(sidebar).getPropertyValue('display');
+
+                //alert(sidebarDisplay)
+      // Verifica se o clique ocorreu fora da barra lateral
+     /*  if (!sidebar.contains(targetElement)) {
+        // Verifica se a barra lateral está aberta
+        if (sidebar.classList.contains('show')) {
+          // Fecha a barra lateral
+          sidebar.classList.remove('show');
+        }
+      } */
+    });
+
+   /*  document.addEventListener("click", function(event) {
+            var targetElement = event.target;
+            var sidebar = document.querySelector('.sidebar');
+
+
+            if (sidebarDisplay === 'none') {
+                console.log('A barra lateral está fechada.');
+            } else {
+                console.log('A barra lateral está aberta.');
+            }
+        }); */
+
+
+            // Ação do botão toggle do sidebar
+            $('.sidebar-toggle').on('click', function() {
+                $('.sidebar').toggleClass('show');
+            });
+        });
+    </script>
+
+    <div class="sidebar-toggle">
+        <i class="bi bi-list"></i>
+    </div>
+</body>
+</html>

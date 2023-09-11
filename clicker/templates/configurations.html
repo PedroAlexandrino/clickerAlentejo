@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Definir Períodos do Dia</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+
+        /* Modo escuro */
+        body.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* Títulos em verde */
+        h2 {
+            color: green;
+        }
+
+        /* Estilos da tabela */
+        table.table-dark {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        table.table-dark th,
+        table.table-dark td {
+            border-color: #454d55;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -200px;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: left 0.3s;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #646464;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        /* Modo escuro */
+        body.dark-mode .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Estilos do título do sidebar em modo escuro */
+        body.dark-mode .sidebar h1 {
+            color: green;
+        }
+
+        /* Estilos do texto do sidebar em modo escuro */
+        body.dark-mode .sidebar ul li a {
+            color: #fff;
+        }
+
+        /* Estilos dos rótulos e caixas de texto */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .container {
+            margin-top: 50px;
+        }
+
+
+        @media (max-width: 1080px) {
+            .txt_titulo{
+                font-size: 500%;
+            }
+            .txt_label{
+                padding-top: 10%;
+                font-size: 300%;
+            }
+            .txt_label2{
+                font-size: 300%;
+            }
+    .txt_box{
+        width: 40%;
+        font-size: 300%;
+    }
+
+     .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            transition: left 0.3s;
+        }
+        .sidebar.show {
+            left: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 50px;
+        }
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: #000;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #646464;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .sidebar-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+        
+        /* Modo escuro */
+        body.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+        
+        /* Títulos em verde */
+        h1 {
+            color: green;
+        }
+        
+        /* Estilos do sidebar em modo escuro */
+        body.dark-mode .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+        
+        /* Estilos do título do sidebar em modo escuro */
+        body.dark-mode .sidebar h1 {
+            color: green; /* Mantém o título em verde */
+        }
+        
+        /* Estilos do texto do sidebar em modo escuro */
+        body.dark-mode .sidebar ul li a {
+            color: #fff;
+                font-size: 250%;
+        }
+        .sideBar_btn{
+        padding: 7.3%;
+        
+    }
+        
+
+.sidebarTexto{
+    font-size: 250%;
+}
+
+.sidebarImagem{
+    width:99%;
+    height:52%;
+}
+
+
+
+}
+    </style>
+</head>
+<body class="dark-mode"  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <div class="sidebar">
+    
+        <ul>
+            <a href="/">
+                <img src='{% static "logo.jpg" %}'width="164" height="82" alt="Logo" class="sidebarImagem">
+            </a>
+            <li><a href="/" class="active"><i class="bi bi-house-door-fill sidebarTexto"></i> Página Inicial</a></li>
+            <li><a href="/home_registo_compras"><i class="bi bi-person-fill sidebarTexto"></i> Registo de Compras</a></li>
+            <li><a href="/configurations"><i class="bi bi-gear-fill sidebarTexto"></i>Configurações</a></li>
+        </ul>
+    </div>
+    <a href="/">
+        <img src='{% static "logo.jpg" %}' style="margin-left:28%" width="364" height="182" alt="Logo">
+    </a>
+
+    <div class="sidebar-toggle sideBar_btn">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <div class="container ">
+        <h2 class="txt_titulo">Definir Períodos do Dia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ({{periodo}})</h2>
+        <form>
+            <div class="form-group">
+                <label class="txt_label" for="periodo1_inicio">Período 1 - Início:</label>
+                <input class="txt_box" type="text" id="periodo1_inicio" name="periodo1_inicio" placeholder="Período 1 -> {{p1_inicio}}" data-input-id="p1_inicio">
+            </div>
+
+            <div class="form-group">
+                <label  class="txt_label2 for="periodo1_fim">Período 1 - Fim:</label>
+                <input class="txt_box" type="text" id="periodo1_fim" name="periodo1_fim" placeholder="Período 1 -> {{p1_fim}}" data-input-id="p1_fim">
+            </div>
+
+            <div class="form-group">
+                <label  class="txt_label2 for="periodo2_inicio">Período 2 - Início:</label>
+                <input class="txt_box" type="text" id="periodo2_inicio" name="periodo2_inicio" placeholder="Período 2 -> {{p2_inicio}}" data-input-id="p2_inicio">
+            </div>
+
+            <div class="form-group">
+                <label  class="txt_label2 for="periodo2_fim">Período 2 - Fim:</label>
+                <input class="txt_box" type="text" id="periodo2_fim" name="periodo2_fim" placeholder="Período 2 -> {{p2_fim}}" data-input-id="p2_fim">
+            </div>
+
+            <div class="form-group">
+                <label  class="txt_label2 for="periodo3_inicio">Período 3 - Início:</label>
+                <input class="txt_box" type="text" id="periodo3_inicio" name="periodo3_inicio" placeholder="Período 3 -> {{p3_inicio}}" data-input-id="p3_inicio">
+            </div>
+
+            <div class="form-group">
+                <label  class="txt_label2 for="periodo3_fim">Período 3 - Fim:</label>
+                <input class="txt_box" type="text" id="periodo3_fim" name="periodo3_fim" placeholder="Período 3 -> {{p3_fim}}" data-input-id="p3_fim">
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Ação do botão toggle do sidebar
+            
+            // Fechar sub-menu ao clicar fora
+            
+
+            // Evitar remoção da classe dark-mode ao clicar nas caixas de texto
+            $('input[type="text"]').on('focus', function() {
+                $('body').addClass('dark-mode');
+            });
+
+            $('input[type="text"]').on('blur', function() {
+                $('body').addClass('dark-mode');
+            });
+            $('.sidebar-toggle').on('click', function() {
+                $('.sidebar').toggleClass('show');
+            });
+
+            $('#periodo3_fim').on('focusout', function() {
+                alert("caixa de texto 6")
+            })
+
+            $('input[type="text"]').each(function() {
+                $(this).on('focusout', function() {
+                    var inputValue = $(this).val(); // Obtém o valor da caixa de texto
+                    var inputId = $(this).data('input-id'); // Obtém o valor do atributo data-input-id
+                    console.log("inputId",inputId,inputValue)
+                    // Realize a lógica de AJAX aqui para cada caixa de texto individual
+                    if (inputValue ===""){}
+                    else{
+                    $.ajax({
+                        type: 'POST',
+                        url: '/add_periodo/',
+                        data: {
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                            inputValue: inputValue,
+                            periodo: inputId // Adicione o valor do atributo data-input-id nos dados enviados
+                        },
+                        success: function() {
+                            // Lógica de sucesso para cada caixa de texto individual
+                            Swal.fire({
+                    icon: 'success',
+                    title: 'Periodo guardado',
+                    showConfirmButton: false
+                    });
+                        }
+                    });
+                }
+                });
+            });
+        });
+    </script>
+
+   
+</body>
+</html>

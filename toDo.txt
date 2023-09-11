@@ -1,0 +1,68 @@
+caixa de texto para adicionar pergunta feita pela pessoa e um btn que limpa a caixa e guarda
+
+p1 14-> 17:00
+p2 17 -> 20:00
+p3 8-> 23:59
+
+-excel diario (done) -> PARA TESTAR
+-excel por periodo
+-excel no final da feira com os dias todos e os periodos todos
+- tabela para ver historico dos cliques por periodo (done)
+
+
+
+
+                                                ______::::::::TAREFAS::::::______
+por os cliques a registar(done)
+por as perguntas a guardar(done)
+por btn de click e de eliminar click se hora estiver fora dos periodos, e alterar o texto principal(done)
+
+
+Acertar o sub_menu (done)
+- o eliminar conta tem de ter um modal com sim/nao (done)
+- colocar a imagem da ambilital na pagina principal e no sub_menu, caso cliques na imagem vais para a pagina principal (done)
+-acertar  animações das paginas para deixar mais fluido (falta por os sweet alert para mobile)
+        -(animação nicial) (done) na pagina principal
+- deixar o site adaptavel para dispositivos mobile (done)
+
+
+PAGINA DAS COMPRAS:
+- tem de dar para adicionar só uma pessoa 
+- tem de dar para uma pessoa possa não pagar uma certa conta
+
+
+
+
+                                                ______::::::::-::::::______
+                                                
+
+
+
+
+
+
+                                                ______::::::::PAGINAS::::::______
+
+PAgina Total_por_pessoa:
+- CRIAR PAGINA onde se vai ver o quando é que cada um gastou 
+- Se clicares na pessoa vai dar para ver as contas todas dessa pessoa 
+        (tem de dar tambem para ver logo o quando é que cada um lhe deve) 
+        
+
+                                                ______::::::::-::::::______
+
+
+
+
+
+
+                                                ______::::::::PROBLEMAS::::::______
+
+(proj não está preparado para que uma pessoa não pague uma certa conta)
+
+                                                ______::::::::-::::::______
+
+66,23 -) Continente pedro
+4.00 - Cafes pedro
+240.35 - restaurante pedro
+
